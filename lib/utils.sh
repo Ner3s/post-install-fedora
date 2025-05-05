@@ -50,59 +50,49 @@ install_all() {
         log_info "Iniciando instalação automática em modo silencioso"
         
         # Set flag to indicate we're in automatic installation mode
-        export AUTO_INSTALL=true
+        export SILENT_MODE=true
+        export SHOW_MENU=false
         
         # Display message about automated installation
         whiptail --title "Instalação Silenciosa" --msgbox "Instalando tudo automaticamente sem prompts..." 8 60
         
         # Install everything in order using the auto functions
-        install_rpmfusion_auto
-        install_codecs_auto
-        install_nvidia_cuda_auto
+        install_rpmfusion
+        install_codecs
+        install_nvidia_cuda
         install_apps_auto
         install_dev_tools_auto
-        install_fonts_auto
-        configure_git_auto
+        install_fonts
+        configure_git
         
-        # Unset auto install flag
-        unset AUTO_INSTALL
+        # reset flags
+        unset SILENT_MODE
+        unset SHOW_MENU
         
         log_success "Instalação silenciosa concluída com sucesso!"
         whiptail --title "Instalação Completa" --msgbox "Instalação silenciosa concluída!" 8 45
     else
         # User chose normal mode - install everything with user intervention
         log_info "Iniciando instalação em modo normal com configuração individual"
+        export SHOW_MENU=false
         
         whiptail --title "Instalação Normal" --msgbox "Você selecionou o modo normal. Cada componente solicitará configurações." 8 60
         
-        # Install components one by one with normal interactive functions
-        whiptail --title "RPM Fusion" --msgbox "Primeira etapa: Instalação do RPM Fusion.\nPressione Enter para continuar." 8 60
         install_rpmfusion
-        
-        whiptail --title "Codecs" --msgbox "Próxima etapa: Instalação de Codecs.\nPressione Enter para continuar." 8 60
         install_codecs
-        
-        whiptail --title "NVIDIA e CUDA" --msgbox "Próxima etapa: Instalação de drivers NVIDIA e CUDA (se aplicável).\nPressione Enter para continuar." 8 60
         install_nvidia_cuda
-        
-        whiptail --title "Aplicativos" --msgbox "Próxima etapa: Instalação de Aplicativos.\nPressione Enter para continuar." 8 60
         install_apps
-        
-        whiptail --title "Ferramentas de Desenvolvimento" --msgbox "Próxima etapa: Instalação de Ferramentas de Desenvolvimento.\nPressione Enter para continuar." 8 60
         install_dev_tools
-        
-        whiptail --title "Fontes" --msgbox "Próxima etapa: Instalação de Fontes.\nPressione Enter para continuar." 8 60
         install_fonts
-        
-        whiptail --title "Git" --msgbox "Próxima etapa: Configuração do Git.\nPressione Enter para continuar." 8 60
         configure_git
-        
-        whiptail --title "SSH" --msgbox "Etapa final: Criação de chave SSH (opcional).\nPressione Enter para continuar." 8 60
         create_ssh_key
         
         log_success "Instalação normal concluída com sucesso!"
         whiptail --title "Instalação Completa" --msgbox "Instalação normal concluída!" 8 45
+
+        unset SHOW_MENU
     fi
+    show_menu
 }
 
 # Function to check for updates

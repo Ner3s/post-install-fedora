@@ -48,7 +48,7 @@ install_dev_tools() {
     if [ $? -ne 0 ]; then
         echo "Seleção cancelada."
         rm -f "$temp_file"
-        show_menu
+        [ "$SHOW_MENU" = true ] && show_menu || return
         return
     fi
     
@@ -59,7 +59,7 @@ install_dev_tools() {
     # If nothing was selected, return to menu
     if [ -z "$selected_tools" ]; then
         whiptail --title "Nenhuma seleção" --msgbox "Nenhuma ferramenta foi selecionada." 8 45
-        show_menu
+        [ "$SHOW_MENU" = true ] && show_menu || return
         return
     fi
     
@@ -88,7 +88,7 @@ install_dev_tools() {
     done
     
     whiptail --title "Instalação Concluída" --msgbox "Ferramentas de desenvolvimento selecionadas foram instaladas com sucesso!" 8 60
-    show_menu
+    [ "$SHOW_MENU" = true ] && show_menu || return
 }
 
 # Auto installation version without prompts or menu return

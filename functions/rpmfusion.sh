@@ -6,14 +6,9 @@ rpmfusion() {
 }
 
 install_rpmfusion() {
-    whiptail --title "Instalando RPM Fusion" --msgbox "Instalando RPM Fusion..." 8 45
-    rpmfusion
-    show_menu
-}
-
-# Auto installation version without prompts or menu return
-install_rpmfusion_auto() {
-    log_info "Instalando RPM Fusion automaticamente..."
+    [ "$SILENT_MODE" != true ] && whiptail --title "Instalando RPM Fusion" --msgbox "Instalando RPM Fusion..." 8 45
+    log_info "Instalando RPM Fusion..."
     rpmfusion
     log_success "RPM Fusion instalado com sucesso!"
+    [ "$SHOW_MENU" = true ] && show_menu || return
 }

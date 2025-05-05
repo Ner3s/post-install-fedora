@@ -44,15 +44,10 @@ fonts() {
 }
 
 install_fonts() {
-    whiptail --title "Instalando Fonts" --msgbox "Instalando fontes..." 8 45
-    fonts
-    whiptail --title "Fontes Instaladas" --msgbox "As fontes foram instaladas com sucesso!" 8 45
-    show_menu
-}
-
-# Auto installation version without prompts or menu return
-install_fonts_auto() {
-    log_info "Instalando fontes automaticamente..."
+    [ "$SILENT_MODE" != true ] && whiptail --title "Instalando Fonts" --msgbox "Instalando fontes..." 8 45
+    log_info "Instalando fontes..."
     fonts
     log_success "As fontes foram instaladas com sucesso!"
+    [ "$SILENT_MODE" != true ] && whiptail --title "Fontes Instaladas" --msgbox "As fontes foram instaladas com sucesso!" 8 45
+    [ "$SHOW_MENU" = true ] && show_menu ||return
 }

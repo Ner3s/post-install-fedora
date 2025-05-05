@@ -59,7 +59,7 @@ install_apps() {
     if [ $? -ne 0 ]; then
         echo "Seleção cancelada."
         rm -f "$temp_file"
-        show_menu
+        [ "$SHOW_MENU" = true ] && show_menu || return
         return
     fi
     
@@ -70,7 +70,7 @@ install_apps() {
     # If nothing was selected, return to menu
     if [ -z "$selected_apps" ]; then
         whiptail --title "Nenhuma seleção" --msgbox "Nenhum aplicativo foi selecionado." 8 45
-        show_menu
+        [ "$SHOW_MENU" = true ] && show_menu || return
         return
     fi
     
@@ -127,7 +127,7 @@ install_apps() {
     done
     
     whiptail --title "Instalação Concluída" --msgbox "Aplicativos selecionados foram instalados com sucesso!" 8 60
-    show_menu
+    [ "$SHOW_MENU" = true ] && show_menu || return
 }
 
 # Auto installation version without prompts or menu return

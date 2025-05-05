@@ -8,14 +8,9 @@ codecs() {
 }
 
 install_codecs() {
-    whiptail --title "Instalando Codecs" --msgbox "Instalando codecs e pacotes multimídia..." 8 45
-    codecs
-    show_menu
-}
-
-# Auto installation version without prompts or menu return
-install_codecs_auto() {
-    log_info "Instalando codecs e pacotes multimídia automaticamente..."
+    [ "$SILENT_MODE" != true ] && whiptail --title "Instalando Codecs" --msgbox "Instalando codecs e pacotes multimídia..." 8 45
+    log_info "Instalando codecs e pacotes multimídia..."
     codecs
     log_success "Codecs instalados com sucesso!"
+    [ "$SHOW_MENU" = true ] && show_menu || return
 }
