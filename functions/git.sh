@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para configurar o Git (pedir nome e email)
 configure_git() {
     # Solicitar nome de usuário e e-mail para o Git
     USER_NAME=$(whiptail --title "Configuração Git" --inputbox "Digite seu nome de usuário do Git:" 8 45 --title "Git" 3>&1 1>&2 2>&3)

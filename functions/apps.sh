@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar aplicativos
 install_apps() {
     whiptail --title "Instalando Aplicativos" --msgbox "Instalando aplicativos..." 8 45
     sudo dnf install fedora-workstation-repositories -y

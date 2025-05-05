@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para exibir o menu principal
 show_menu() {
     while true; do
         whiptail --title "$SCRIPT_NAME" --menu "Escolha uma opção:" 20 70 14 \

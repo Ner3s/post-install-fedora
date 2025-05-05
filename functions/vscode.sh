@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar o Visual Studio Code
 install_vscode() {
     whiptail --title "Instalando Visual Studio Code" --msgbox "Instalando Visual Studio Code..." 8 45
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar fontes
 install_fonts() {
     whiptail --title "Instalando Fonts" --msgbox "Instalando fontes..." 8 45
     

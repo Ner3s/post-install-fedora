@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar Codecs
 install_codecs() {
     whiptail --title "Instalando Codecs" --msgbox "Instalando codecs e pacotes multimídia..." 8 45
     sudo dnf swap ffmpeg-free ffmpeg --allowerasing -y

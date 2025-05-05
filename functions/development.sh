@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar NVM, Oh-my-zsh e Zinit
 install_nvm_zsh_zinit() {
     whiptail --title "Instalando NVM, Oh-my-zsh e Zinit" --msgbox "Instalando NVM, Oh-my-zsh e Zinit..." 8 45
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash

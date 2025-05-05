@@ -15,7 +15,7 @@ fi
 if [ -d "$DIRECTORY" ]; then
     echo "O repositório já existe. Atualizando o repositório..."
     cd "$DIRECTORY" || exit
-    git stash && git stash clear && git pull
+    git stash && git pull
     chmod +x install.sh
     ./install.sh
 else

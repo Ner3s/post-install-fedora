@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Função para instalar Docker e configuração
 install_docker() {
     whiptail --title "Instalando Docker" --msgbox "Instalando Docker..." 8 45
     sudo dnf -y install dnf-plugins-core
