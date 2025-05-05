@@ -98,6 +98,7 @@ The script provides a menu-driven interface to install and configure the followi
 ```
 post-install-fedora/
 ├── install.sh              # Main script
+├── auto-install.sh         # One-line installation script
 ├── README.md               # This documentation (English)
 ├── README_pt-BR.md         # Portuguese documentation
 ├── LICENSE                 # MIT License file
@@ -107,15 +108,12 @@ post-install-fedora/
 ├── functions/              # Individual installation modules
 │   ├── apps.sh             # Application installation
 │   ├── codecs.sh           # Multimedia codecs
-│   ├── development.sh      # NVM, Oh-my-zsh and Zinit
-│   ├── docker.sh           # Docker installation
+│   ├── dev_tools.sh        # Development tools and environments
 │   ├── fonts.sh            # Font installation
 │   ├── git.sh              # Git configuration
 │   ├── nvidia.sh           # NVIDIA drivers
 │   ├── rpmfusion.sh        # RPM Fusion repositories
-│   ├── ssh.sh              # SSH key management
-│   ├── tools.sh            # Development tools
-│   └── vscode.sh           # VS Code installation
+│   └── ssh.sh              # SSH key management
 └── lib/                    # Utility functions
     ├── clipboard.sh        # SSH copy to clipboard utils
     ├── common.sh           # Common utility functions

@@ -94,8 +94,9 @@ O script fornece uma interface de menu para instalar e configurar os seguintes c
 ```
 post-install-fedora/
 ├── install.sh              # Script principal
+├── auto-install.sh         # Script de instalação em uma linha
 ├── README.md               # Documentação em inglês
-├── README-pt-BR.md         # Esta documentação em português
+├── README_pt-BR.md         # Esta documentação em português
 ├── LICENSE                 # Arquivo de licença MIT
 ├── fonts/                  # Arquivos de fontes
 │   ├── JetBrainsMono.ttf
@@ -103,17 +104,16 @@ post-install-fedora/
 ├── functions/              # Módulos de instalação individuais
 │   ├── apps.sh             # Instalação de aplicativos
 │   ├── codecs.sh           # Codecs multimídia
-│   ├── development.sh      # NVM, Oh-my-zsh e Zinit
-│   ├── docker.sh           # Instalação do Docker
+│   ├── dev_tools.sh        # Ferramentas e ambientes de desenvolvimento
 │   ├── fonts.sh            # Instalação de fontes
 │   ├── git.sh              # Configuração do Git
 │   ├── nvidia.sh           # Drivers NVIDIA
 │   ├── rpmfusion.sh        # Repositórios RPM Fusion
-│   ├── ssh.sh              # Gerenciamento de chaves SSH
-│   ├── tools.sh            # Ferramentas de desenvolvimento
-│   └── vscode.sh           # Instalação do VS Code
+│   └── ssh.sh              # Gerenciamento de chaves SSH
 └── lib/                    # Funções utilitárias
     ├── clipboard.sh        # Utilitários de cópia para área de transferência
+    ├── common.sh           # Funções utilitárias comuns
+    ├── constants.sh        # Constantes e configuração do script
     └── utils.sh            # Menu e utilidades gerais
 ```
 
