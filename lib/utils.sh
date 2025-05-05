@@ -74,40 +74,54 @@ install_all() {
 check_for_updates() {
     whiptail --title "Verificando Atualizações" --msgbox "Verificando atualizações..." 8 45
     
-    # Create a temporary directory
-    local temp_dir=$(mktemp -d)
     log_info "Verificando atualizações do script..."
     
-    # Download the repository's main branch to check for updates
-    if git clone --depth=1 https://github.com/${GITHUB_REPO}.git "$temp_dir" &>/dev/null; then
-        # Compare versions
-        if [ -f "$temp_dir/lib/constants.sh" ]; then
-            local remote_version=$(grep "SCRIPT_VERSION=" "$temp_dir/lib/constants.sh" | cut -d'"' -f2)
-            
-            if [ "$remote_version" != "$SCRIPT_VERSION" ]; then
-                if whiptail --title "Atualização Disponível" --yesno "Uma nova versão está disponível: $remote_version\nVersão atual: $SCRIPT_VERSION\n\nDeseja atualizar?" 12 60; then
-                    log_info "Atualizando para a versão $remote_version..."
+    # Get current directory
+    local current_dir="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+    
+    # Save current branch and stash any changes
+    cd "$current_dir" || return
+    local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+    git stash &>/dev/null
+    
+    # Fetch latest changes
+    if git fetch origin $current_branch &>/dev/null; then
+        # Check if there are updates available
+        local updates_available=$(git rev-list HEAD..origin/$current_branch --count 2>/dev/null)
+        
+        if [ "$updates_available" -gt 0 ]; then
+            if whiptail --title "Atualização Disponível" --yesno "Existem atualizações disponíveis.\n\nDeseja atualizar o $SCRIPT_NAME?" 10 60; then
+                log_info "Atualizando o script..."
+                
+                # Pull changes
+                if git pull origin $current_branch &>/dev/null; then
+                    # Get new version after update
+                    source "$current_dir/lib/constants.sh"
                     
-                    # Copy all files from temp dir to current dir
-                    cp -rf "$temp_dir"/* "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+                    log_success "Atualização concluída para a versão $SCRIPT_VERSION. Reiniciando o script..."
+                    whiptail --title "Atualização Concluída" --msgbox "Atualização para a versão $SCRIPT_VERSION concluída. O script será reiniciado." 8 60
                     
-                    log_success "Atualização concluída. Reiniciando o script..."
-                    whiptail --title "Atualização Concluída" --msgbox "Atualização para a versão $remote_version concluída. O script será reiniciado." 8 60
+                    # Apply any stashed changes
+                    git stash pop &>/dev/null
                     
-                    # Clean up and restart script
-                    rm -rf "$temp_dir"
-                    exec "$(dirname "$(dirname "${BASH_SOURCE[0]}")")/install.sh"
+                    # Restart script
+                    exec "$current_dir/install.sh"
+                else
+                    log_error "Falha ao atualizar o script."
+                    whiptail --title "Erro na Atualização" --msgbox "Não foi possível atualizar o script. Tente novamente mais tarde." 8 60
+                    # Apply any stashed changes
+                    git stash pop &>/dev/null
                 fi
             else
-                whiptail --title "Nenhuma Atualização" --msgbox "Você já está executando a versão mais recente ($SCRIPT_VERSION)!" 8 60
+                # Apply any stashed changes if user declines update
+                git stash pop &>/dev/null
             fi
         else
-            whiptail --title "Erro na Verificação" --msgbox "Não foi possível determinar a versão mais recente." 8 60
+            whiptail --title "Nenhuma Atualização" --msgbox "Você já está executando a versão mais recente ($SCRIPT_VERSION)!" 8 60
+            # Apply any stashed changes
+            git stash pop &>/dev/null
         fi
     else
         whiptail --title "Erro na Verificação" --msgbox "Não foi possível verificar atualizações. Verifique sua conexão com a internet." 8 60
     fi
-    
-    # Clean up
-    rm -rf "$temp_dir"
 }
