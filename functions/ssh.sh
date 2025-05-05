@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Source the clipboard functions
-# (Will be properly sourced in main script)
-
-# Function to create SSH key
 create_ssh_key() {
     whiptail --title "Criando SSH Key" --msgbox "Criando chave SSH..." 8 45
     

@@ -9,7 +9,7 @@ This script automates the post-installation setup of a Fedora Linux system, inst
 Run this one-liner to automatically download and execute the installation script:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/auto-install.sh)"
 ```
 
 If you prefer to clone the repository first:
@@ -89,31 +89,35 @@ The script provides a menu-driven interface to install and configure the followi
 - Automatically adds keys to the SSH agent
 - Copies public key to clipboard for easy GitHub/GitLab setup
 
+### 12. Auto-Update System
+- Check for script updates
+- Automatically update to the latest version
+
 ## 🧰 Project Structure
 
 ```
 post-install-fedora/
 ├── install.sh              # Main script
+├── auto-install.sh         # One-line installation script
 ├── README.md               # This documentation (English)
-├── README-pt-BR.md         # Portuguese documentation
+├── README_pt-BR.md         # Portuguese documentation
 ├── LICENSE                 # MIT License file
-├── fonts/                  # Font files
+├── fonts/                  # Font files directory (created automatically if missing)
 │   ├── JetBrainsMono.ttf
 │   └── MesloLGS.ttf
 ├── functions/              # Individual installation modules
 │   ├── apps.sh             # Application installation
 │   ├── codecs.sh           # Multimedia codecs
-│   ├── development.sh      # NVM, Oh-my-zsh and Zinit
-│   ├── docker.sh           # Docker installation
+│   ├── dev_tools.sh        # Development tools and environments
 │   ├── fonts.sh            # Font installation
 │   ├── git.sh              # Git configuration
 │   ├── nvidia.sh           # NVIDIA drivers
 │   ├── rpmfusion.sh        # RPM Fusion repositories
-│   ├── ssh.sh              # SSH key management
-│   ├── tools.sh            # Development tools
-│   └── vscode.sh           # VS Code installation
+│   └── ssh.sh              # SSH key management
 └── lib/                    # Utility functions
     ├── clipboard.sh        # SSH copy to clipboard utils
+    ├── common.sh           # Common utility functions
+    ├── constants.sh        # Script constants and configuration
     └── utils.sh            # Menu and general utilities
 ```
 
@@ -134,6 +138,11 @@ For a completely automated setup, select option 12 "Instalar Tudo Automaticament
 Each component is separated into its own file, making it easy to customize:
 - Edit any file in the `functions/` directory to modify a specific component
 - Add new functions by creating new files in the `functions/` directory and including them in `install.sh`
+- Configure global settings in the `lib/constants.sh` file
+
+## 📥 Resource Management
+
+The script now automatically downloads required resources (like fonts) if they're not available locally, making the automatic installation more robust.
 
 ## 📄 License
 
