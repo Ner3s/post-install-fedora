@@ -9,7 +9,7 @@ This script automates the post-installation setup of a Fedora Linux system, inst
 Run this one-liner to automatically download and execute the installation script:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/auto-install.sh)"
 ```
 
 If you prefer to clone the repository first:

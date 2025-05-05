@@ -9,7 +9,7 @@ Este script automatiza o processo de pós-instalação de um sistema Fedora Linu
 Execute este comando para baixar e executar o script de instalação automaticamente:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ner3s/post-install-fedora/main/auto-install.sh)"
 ```
 
 Se preferir clonar o repositório primeiro:
