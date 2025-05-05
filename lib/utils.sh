@@ -4,19 +4,18 @@ show_menu() {
     while true; do
         whiptail --title "$SCRIPT_NAME" --menu "Escolha uma opção:" 20 70 14 \
             "1" "Instalar RPM Fusion" \
-            "2" "Instalar Visual Studio Code" \
-            "3" "Instalar Codecs" \
-            "4" "Instalar Drivers NVIDIA e CUDA" \
-            "5" "Instalar Aplicativos" \
-            "6" "Instalar Ferramentas e Git" \
-            "7" "Instalar Docker e Configuração" \
-            "8" "Instalar NVM, Oh-my-zsh e Zinit" \
-            "9" "Instalar Fonts" \
-            "10" "Configurar Git" \
-            "11" "Configurar chave SSH" \
-            "12" "Instalar Tudo Automaticamente" \
-            "13" "Verificar Atualizações" \
-            "14" "Sair" 2>/tmp/menuitem.txt
+            "2" "Instalar Codecs" \
+            "3" "Instalar Drivers NVIDIA e CUDA" \
+            "4" "Instalar Aplicativos" \
+            "5" "Instalar Ferramentas e Git" \
+            "6" "Instalar Docker e Configuração" \
+            "7" "Instalar NVM, Oh-my-zsh e Zinit" \
+            "8" "Instalar Fonts" \
+            "9" "Configurar Git" \
+            "10" "Configurar chave SSH" \
+            "11" "Instalar Tudo Automaticamente" \
+            "12" "Verificar Atualizações" \
+            "13" "Sair" 2>/tmp/menuitem.txt
         
         # Check if the user pressed Cancel or Esc
         if [ $? -ne 0 ]; then
@@ -27,19 +26,18 @@ show_menu() {
         menuitem=$(< /tmp/menuitem.txt)
         case $menuitem in
             1) install_rpmfusion ;;
-            2) install_vscode ;;
-            3) install_codecs ;;
-            4) install_nvidia_cuda ;;
-            5) install_apps ;;
-            6) install_tools ;;
-            7) install_docker ;;
-            8) install_nvm_zsh_zinit ;;
-            9) install_fonts ;;
-            10) configure_git ;;
-            11) create_ssh_key ;;
-            12) install_all ;;
-            13) check_for_updates ;;
-            14) 
+            2) install_codecs ;;
+            3) install_nvidia_cuda ;;
+            4) install_apps ;;
+            5) install_tools ;;
+            6) install_docker ;;
+            7) install_nvm_zsh_zinit ;;
+            8) install_fonts ;;
+            9) configure_git ;;
+            10) create_ssh_key ;;
+            11) install_all ;;
+            12) check_for_updates ;;
+            13) 
                 whiptail --title "Saindo" --msgbox "Obrigado por usar o $SCRIPT_NAME!" 8 45
                 exit 0 
                 ;;
