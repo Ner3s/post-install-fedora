@@ -37,10 +37,15 @@ install_apps() {
         app_names+=("${apps[i]}")
     done
     
-    # Set all items to on or off based on select_all
+    # Set all items to on
     if [ "$select_all" = "yes" ]; then
         for ((i=2; i<${#apps[@]}; i+=3)); do
             apps[i]="on"
+        done
+    else
+        # Set all items to off
+        for ((i=2; i<${#apps[@]}; i+=3)); do
+            apps[i]="off"
         done
     fi
     

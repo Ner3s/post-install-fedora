@@ -26,10 +26,15 @@ install_dev_tools() {
         tool_names+=("${tools[i]}")
     done
     
-    # Set all items to on or off based on select_all
+    # Set all items to on
     if [ "$select_all" = "yes" ]; then
         for ((i=2; i<${#tools[@]}; i+=3)); do
             tools[i]="on"
+        done
+    else
+        # Set all items to off
+        for ((i=2; i<${#tools[@]}; i+=3)); do
+            tools[i]="off"
         done
     fi
     

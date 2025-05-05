@@ -76,13 +76,28 @@ install_all() {
         whiptail --title "Instalação Normal" --msgbox "Você selecionou o modo normal. Cada componente solicitará configurações." 8 60
         
         # Install components one by one with normal interactive functions
+        whiptail --title "RPM Fusion" --msgbox "Primeira etapa: Instalação do RPM Fusion.\nPressione Enter para continuar." 8 60
         install_rpmfusion
+        
+        whiptail --title "Codecs" --msgbox "Próxima etapa: Instalação de Codecs.\nPressione Enter para continuar." 8 60
         install_codecs
+        
+        whiptail --title "NVIDIA e CUDA" --msgbox "Próxima etapa: Instalação de drivers NVIDIA e CUDA (se aplicável).\nPressione Enter para continuar." 8 60
         install_nvidia_cuda
+        
+        whiptail --title "Aplicativos" --msgbox "Próxima etapa: Instalação de Aplicativos.\nPressione Enter para continuar." 8 60
         install_apps
+        
+        whiptail --title "Ferramentas de Desenvolvimento" --msgbox "Próxima etapa: Instalação de Ferramentas de Desenvolvimento.\nPressione Enter para continuar." 8 60
         install_dev_tools
+        
+        whiptail --title "Fontes" --msgbox "Próxima etapa: Instalação de Fontes.\nPressione Enter para continuar." 8 60
         install_fonts
+        
+        whiptail --title "Git" --msgbox "Próxima etapa: Configuração do Git.\nPressione Enter para continuar." 8 60
         configure_git
+        
+        whiptail --title "SSH" --msgbox "Etapa final: Criação de chave SSH (opcional).\nPressione Enter para continuar." 8 60
         create_ssh_key
         
         log_success "Instalação normal concluída com sucesso!"
