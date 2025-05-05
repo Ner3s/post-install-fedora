@@ -1,8 +1,6 @@
 #!/bin/bash
 
-install_fonts() {
-    whiptail --title "Instalando Fonts" --msgbox "Instalando fontes..." 8 45
-    
+fonts() {
     # Create user fonts directory
     mkdir -p ~/.fonts
     
@@ -43,7 +41,18 @@ install_fonts() {
     if [ "$font_installed" = true ]; then
         fc-cache -f -v
     fi
-    
+}
+
+install_fonts() {
+    whiptail --title "Instalando Fonts" --msgbox "Instalando fontes..." 8 45
+    fonts
     whiptail --title "Fontes Instaladas" --msgbox "As fontes foram instaladas com sucesso!" 8 45
     show_menu
+}
+
+# Auto installation version without prompts or menu return
+install_fonts_auto() {
+    log_info "Instalando fontes automaticamente..."
+    fonts
+    log_success "As fontes foram instaladas com sucesso!"
 }

@@ -7,15 +7,13 @@ show_menu() {
             "2" "Instalar Codecs" \
             "3" "Instalar Drivers NVIDIA e CUDA" \
             "4" "Instalar Aplicativos" \
-            "5" "Instalar Ferramentas e Git" \
-            "6" "Instalar Docker e Configuração" \
-            "7" "Instalar NVM, Oh-my-zsh e Zinit" \
-            "8" "Instalar Fonts" \
-            "9" "Configurar Git" \
-            "10" "Configurar chave SSH" \
-            "11" "Instalar Tudo Automaticamente" \
-            "12" "Verificar Atualizações" \
-            "13" "Sair" 2>/tmp/menuitem.txt
+            "5" "Instalar Ferramentas de Desenvolvimento" \
+            "6" "Instalar Fonts" \
+            "7" "Configurar Git" \
+            "8" "Configurar chave SSH" \
+            "9" "Instalar Tudo Automaticamente" \
+            "10" "Verificar Atualizações" \
+            "11" "Sair" 2>/tmp/menuitem.txt
         
         # Check if the user pressed Cancel or Esc
         if [ $? -ne 0 ]; then
@@ -29,15 +27,13 @@ show_menu() {
             2) install_codecs ;;
             3) install_nvidia_cuda ;;
             4) install_apps ;;
-            5) install_tools ;;
-            6) install_docker ;;
-            7) install_nvm_zsh_zinit ;;
-            8) install_fonts ;;
-            9) configure_git ;;
-            10) create_ssh_key ;;
-            11) install_all ;;
-            12) check_for_updates ;;
-            13) 
+            5) install_dev_tools ;;
+            6) install_fonts ;;
+            7) configure_git ;;
+            8) create_ssh_key ;;
+            9) install_all ;;
+            10) check_for_updates ;;
+            11) 
                 whiptail --title "Saindo" --msgbox "Obrigado por usar o $SCRIPT_NAME!" 8 45
                 exit 0 
                 ;;
@@ -48,24 +44,50 @@ show_menu() {
 
 # Função para instalar tudo automaticamente, na ordem
 install_all() {
-    whiptail --title "Instalação Automática" --msgbox "Instalando tudo automaticamente..." 8 45
-
-    log_info "Iniciando instalação automática de todos os componentes"
-    
-    # Instalar pacotes na ordem
-    install_rpmfusion
-    install_vscode
-    install_codecs
-    install_nvidia_cuda
-    install_apps
-    install_tools
-    install_docker
-    install_nvm_zsh_zinit
-    install_fonts
-    configure_git
-
-    log_success "Instalação automática concluída com sucesso!"
-    whiptail --title "Instalação Completa" --msgbox "Instalação concluída!" 8 45
+    # Ask user if they want silent mode or normal mode
+    if whiptail --title "Modo de Instalação" --yesno "Escolha o modo de instalação:\n\nSelecione 'Sim' para modo silencioso (instalação automática sem prompts)\nSelecione 'Não' para modo normal (configurar cada componente)" 12 78; then
+        # User chose silent mode
+        log_info "Iniciando instalação automática em modo silencioso"
+        
+        # Set flag to indicate we're in automatic installation mode
+        export AUTO_INSTALL=true
+        
+        # Display message about automated installation
+        whiptail --title "Instalação Silenciosa" --msgbox "Instalando tudo automaticamente sem prompts..." 8 60
+        
+        # Install everything in order using the auto functions
+        install_rpmfusion_auto
+        install_codecs_auto
+        install_nvidia_cuda_auto
+        install_apps_auto
+        install_dev_tools_auto
+        install_fonts_auto
+        configure_git_auto
+        
+        # Unset auto install flag
+        unset AUTO_INSTALL
+        
+        log_success "Instalação silenciosa concluída com sucesso!"
+        whiptail --title "Instalação Completa" --msgbox "Instalação silenciosa concluída!" 8 45
+    else
+        # User chose normal mode - install everything with user intervention
+        log_info "Iniciando instalação em modo normal com configuração individual"
+        
+        whiptail --title "Instalação Normal" --msgbox "Você selecionou o modo normal. Cada componente solicitará configurações." 8 60
+        
+        # Install components one by one with normal interactive functions
+        install_rpmfusion
+        install_codecs
+        install_nvidia_cuda
+        install_apps
+        install_dev_tools
+        install_fonts
+        configure_git
+        create_ssh_key
+        
+        log_success "Instalação normal concluída com sucesso!"
+        whiptail --title "Instalação Completa" --msgbox "Instalação normal concluída!" 8 45
+    fi
 }
 
 # Function to check for updates

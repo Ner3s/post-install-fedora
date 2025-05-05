@@ -124,3 +124,42 @@ install_apps() {
     whiptail --title "Instalação Concluída" --msgbox "Aplicativos selecionados foram instalados com sucesso!" 8 60
     show_menu
 }
+
+# Auto installation version without prompts or menu return
+install_apps_auto() {
+    log_info "Instalando todos os aplicativos automaticamente..."
+    
+    # Install RPM repositories
+    sudo dnf install fedora-workstation-repositories -y
+    
+    # Install Google Chrome
+    log_info "Instalando Google Chrome..."
+    sudo dnf config-manager --set-enabled google-chrome
+    sudo dnf install google-chrome-stable -y
+    sudo dnf remove fedora-chromium-config -y
+    
+    # Install regular DNF packages
+    log_info "Instalando pacotes DNF padrão..."
+    sudo dnf install flameshot peek gnome-tweaks steam gimp inkscape gnome-extensions-app htop nvim -y
+    
+    # Install Flatpak applications
+    log_info "Instalando aplicativos Flatpak..."
+    flatpak install flathub com.discordapp.Discord -y
+    flatpak install flathub com.github.tchx84.Flatseal -y
+    flatpak install flathub com.obsproject.Studio -y
+    flatpak install flathub io.github.jeffshee.Hidamari -y
+    
+    # Install Brave browser
+    log_info "Instalando Brave browser..."
+    sudo dnf install dnf-plugins-core -y
+    sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+    sudo dnf install brave-browser -y
+    
+    # Install VS Code
+    log_info "Instalando Visual Studio Code..."
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+    sudo dnf install code -y
+    
+    log_success "Todos os aplicativos instalados com sucesso!"
+}
