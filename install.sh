@@ -1,18 +1,8 @@
 #!/bin/bash
-
-# Ensure script is run from its directory
-cd "$(dirname "$0")" || exit 1
-
 # Check for necessary dependencies
 if ! command -v whiptail &> /dev/null; then
     echo "O whiptail não está instalado. Instalando o pacote 'newt'..."
     sudo dnf install -y newt
-fi
-
-# Check for curl (needed for downloading resources)
-if ! command -v curl &> /dev/null; then
-    echo "The curl package is not installed. Installing curl..."
-    sudo dnf install -y curl
 fi
 
 # Import utility libraries
