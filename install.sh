@@ -10,6 +10,7 @@ source "$(dirname "$0")/lib/constants.sh"
 source "$(dirname "$0")/lib/common.sh"
 source "$(dirname "$0")/lib/utils.sh"
 source "$(dirname "$0")/lib/clipboard.sh"
+source "$(dirname "$0")/lib/gnome-extensions.sh"
 
 # Setup function to ensure all required directories exist
 setup_workspace() {

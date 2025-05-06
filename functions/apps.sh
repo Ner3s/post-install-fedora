@@ -18,6 +18,7 @@ install_apps() {
         "obs-studio" "Streaming and recording tool" "on"
         "hidamari" "Live wallpaper app" "on"
         "brave" "Web browser" "on"
+        "dbeaver" "Multi-plataform database tool" "on"
         "vscode" "Visual Studio Code editor" "on"
     )
     
@@ -111,6 +112,10 @@ install_apps() {
                 sudo dnf install dnf-plugins-core -y
                 sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
                 sudo dnf install brave-browser -y
+                ;;
+            "dbeaver")
+                whiptail --title "Instalando Hidamari" --infobox "Instalando DBeaver Community via Flatpak..." 8 45
+                flatpak install flathub io.dbeaver.DBeaverCommunity -y
                 ;;
             "vscode")
                 whiptail --title "Instalando Visual Studio Code" --infobox "Instalando Visual Studio Code..." 8 45
