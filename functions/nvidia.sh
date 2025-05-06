@@ -2,7 +2,6 @@
 
 nvidia_cuda() {
     sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs -y
-    sudo dnf install nvidia-vaapi-driver -y
 }
 
 install_nvidia_cuda() {
