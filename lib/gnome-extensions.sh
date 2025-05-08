@@ -5,8 +5,7 @@ make_backup() {
         whiptail --title "Backup de Extensões GNOME" --msgbox "Iniciando backup das extensões GNOME..." 8 60
     fi
     
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    OUTPUT_DIR="$SCRIPT_DIR/backups/gnome-extensions"
+    OUTPUT_DIR="$PROJECT_DIR/backups/gnome-extensions"
     mkdir -p "$OUTPUT_DIR"
 
     ACTIVE_EXTENSIONS_FILE="$OUTPUT_DIR/active-extensions.list"
@@ -42,8 +41,7 @@ restore_backup() {
         whiptail --title "Restaurar Extensões GNOME" --msgbox "Iniciando restauração das extensões GNOME..." 8 60
     fi
     
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    BACKUP_DIR="$SCRIPT_DIR/backups/gnome-extensions"
+    BACKUP_DIR="$PROJECT_DIR/backups/gnome-extensions"
     
     if [ ! -d "$BACKUP_DIR" ]; then
         if [ "$SILENT_MODE" != true ]; then
@@ -52,6 +50,25 @@ restore_backup() {
         log_error "Diretório de backup não encontrado: $BACKUP_DIR"
         [ "$SHOW_MENU" = true ] && return
         return 1
+    fi
+    
+    log_info "Verificando se o gnome-extensions-app está instalado..."
+    if ! rpm -q gnome-extensions-app &> /dev/null; then
+        log_info "Instalando gnome-extensions-app..."
+        sudo dnf install -y gnome-extensions-app
+        log_success "gnome-extensions-app instalado com sucesso!"
+    else
+        log_info "gnome-extensions-app já está instalado."
+    fi
+
+    if ! command -v gnome-shell-extension-installer &> /dev/null; then
+        log_info "Instalando gnome-shell-extension-installer..."
+        # Use the existing extension installer in the externals directory
+        chmod +x "$PROJECT_DIR/lib/externals/gnome-shell-extension-installer"
+        sudo cp "$PROJECT_DIR/lib/externals/gnome-shell-extension-installer" /usr/bin/
+        log_success "gnome-shell-extension-installer instalado com sucesso!"
+    else
+        log_info "gnome-shell-extension-installer já está instalado."
     fi
     
     ACTIVE_EXTENSIONS_FILE="$BACKUP_DIR/active-extensions.list"
@@ -64,6 +81,26 @@ restore_backup() {
         return 1
     fi
     
+    GNOME_SHELL_VERSION=$(gnome-shell --version | awk '{print $3}')
+    log_info "Versão do GNOME Shell: $GNOME_SHELL_VERSION"
+    
+    log_info "Instalando extensões do GNOME..."
+
+    cat "$ACTIVE_EXTENSIONS_FILE" | tr -d "[]' " | tr ',' '\n' | while read -r extension_id; do
+        if [ -n "$extension_id" ]; then
+            log_info "Instalando extensão: $extension_id"
+
+            extension_numeric_id=$(echo "$extension_id" | grep -oP '^\d+' || echo "")
+            
+            if [ -n "$extension_numeric_id" ]; then
+                gnome-shell-extension-installer "$extension_numeric_id" --yes --version="$GNOME_SHELL_VERSION"
+            else
+                log_warning "Não foi possível obter ID numérico para $extension_id. Tentando instalar pelo nome..."
+                gnome-shell-extension-installer "$extension_id" --yes --version="$GNOME_SHELL_VERSION"
+            fi
+        fi
+    done
+
     log_info "Restaurando lista de extensões ativas..."
     EXTENSIONS=$(cat "$ACTIVE_EXTENSIONS_FILE")
     gsettings set org.gnome.shell enabled-extensions "$EXTENSIONS"
@@ -86,7 +123,31 @@ restore_backup() {
     log_success "Restauração das extensões GNOME concluída"
     
     if [ "$SILENT_MODE" != true ]; then
-        whiptail --title "Restauração Concluída" --msgbox "As configurações das extensões GNOME foram restauradas.\n\nPode ser necessário reiniciar o GNOME Shell (Alt+F2, r, Enter)." 10 70
+        whiptail --title "Restauração Concluída" --msgbox "As extensões GNOME foram instaladas e configurações restauradas.\n\nPode ser necessário reiniciar o GNOME Shell (Alt+F2, r, Enter)." 10 70
+    fi
+    
+    [ "$SHOW_MENU" = true ] && return
+}
+
+install_gnome_extensions_installer() {
+    if [ "$SILENT_MODE" != true ]; then
+        whiptail --title "Instalando GNOME Extensions Installer" --msgbox "Instalando gnome-shell-extensions-installer..." 8 60
+    fi
+    
+    log_info "Instalando gnome-shell-extensions-installer..."
+    
+    if ! command -v gnome-shell-extension-installer &> /dev/null; then
+        chmod +x "$PROJECT_DIR/lib/externals/gnome-shell-extension-installer"
+        sudo cp "$PROJECT_DIR/lib/externals/gnome-shell-extension-installer" /usr/bin/
+        log_success "gnome-shell-extensions-installer instalado com sucesso!"
+    else
+        log_info "gnome-shell-extension-installer já está instalado."
+        whiptail --title "Instalação Concluída" --msgbox "gnome-shell-extension-installer já está instalado." 8 60
+        return
+    fi
+    
+    if [ "$SILENT_MODE" != true ]; then
+        whiptail --title "Instalação Concluída" --msgbox "gnome-shell-extensions-installer instalado com sucesso!" 8 60
     fi
     
     [ "$SHOW_MENU" = true ] && return
@@ -95,6 +156,7 @@ restore_backup() {
 manage_gnome_extensions() {
     while true; do
         whiptail --title "Gerenciar extensões GNOME" --menu "Escolha uma opção:" 15 60 2 \
+            "0" "Instalar gnome-shell-extensions-installer" \
             "1" "Fazer backup das extensões GNOME" \
             "2" "Restaurar backup das extensões GNOME" \
             "3" "Voltar ao menu principal" 2>/tmp/menuchoice.txt
@@ -107,6 +169,7 @@ manage_gnome_extensions() {
         
         menuchoice=$(< /tmp/menuchoice.txt)
         case $menuchoice in
+            0) install_gnome_extensions_installer ;;
             1) make_backup ;;
             2) restore_backup ;;
             3) return ;;

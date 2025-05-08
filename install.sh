@@ -5,26 +5,27 @@ if ! command -v whiptail &> /dev/null; then
     sudo dnf install -y newt
 fi
 
+# Define global project directory
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Import utility libraries
-source "$(dirname "$0")/lib/constants.sh"
-source "$(dirname "$0")/lib/common.sh"
-source "$(dirname "$0")/lib/utils.sh"
-source "$(dirname "$0")/lib/clipboard.sh"
-source "$(dirname "$0")/lib/gnome-extensions.sh"
+source "${PROJECT_DIR}/lib/constants.sh"
+source "${PROJECT_DIR}/lib/common.sh"
+source "${PROJECT_DIR}/lib/utils.sh"
+source "${PROJECT_DIR}/lib/clipboard.sh"
+source "${PROJECT_DIR}/lib/gnome-extensions.sh"
 
 # Setup function to ensure all required directories exist
 setup_workspace() {
-    local script_dir="$(pwd)"
-    
     # Create fonts directory if it doesn't exist
-    if [ ! -d "${script_dir}/fonts" ]; then
-        mkdir -p "${script_dir}/fonts"
+    if [ ! -d "${PROJECT_DIR}/fonts" ]; then
+        mkdir -p "${PROJECT_DIR}/fonts"
     fi
     
     # Ensure we have the right permissions
-    chmod +x "${script_dir}/install.sh"
-    find "${script_dir}/functions" -name "*.sh" -exec chmod +x {} \;
-    find "${script_dir}/lib" -name "*.sh" -exec chmod +x {} \;
+    chmod +x "${PROJECT_DIR}/install.sh"
+    find "${PROJECT_DIR}/functions" -name "*.sh" -exec chmod +x {} \;
+    find "${PROJECT_DIR}/lib" -name "*.sh" -exec chmod +x {} \;
     
     log_success "Workspace setup complete"
 }
@@ -32,7 +33,7 @@ setup_workspace() {
 # Import all function modules
 import_modules() {
     # Import basic modules
-    for module in functions/*.sh; do
+    for module in ${PROJECT_DIR}/functions/*.sh; do
         source "$module"
     done
     
