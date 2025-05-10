@@ -1,7 +1,7 @@
 #!/bin/bash
 
 nvidia_cuda() {
-    sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs -y
+    sudo dnf install akmod-nvidia -y
 }
 
 install_nvidia_cuda() {

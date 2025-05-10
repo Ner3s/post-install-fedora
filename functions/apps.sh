@@ -3,23 +3,24 @@
 install_apps() {
     # Define all available applications with descriptions
     apps=(
-        "google-chrome" "Google Chrome web browser" "on"
         "flameshot" "Screenshot tool" "on"
         "peek" "GIF screen recorder" "on"
         "gnome-tweaks" "GNOME desktop customization tool" "on"
-        "steam" "Gaming platform" "on"
+        "gnome-extensions-app" "GNOME Extensions manager" "on"
         "gimp" "Image editor" "on"
         "inkscape" "Vector graphics editor" "on"
-        "gnome-extensions-app" "GNOME Extensions manager" "on"
-        "htop" "System monitor tool" "on"
-        "nvim" "Neovim text editor" "on"
+        "steam" "Gaming platform" "on"
         "discord" "Discord chat app (Flatpak)" "on"
-        "flatseal" "Flatpak permissions manager" "on"
+        "htop" "System monitor tool" "on"
+        "fastfetch" "Fast system information fetcher" "on"
+        "nvim" "Neovim text editor" "on"
         "obs-studio" "Streaming and recording tool" "on"
-        "hidamari" "Live wallpaper app" "on"
+        "google-chrome" "Google Chrome web browser" "on"
         "brave" "Web browser" "on"
-        "dbeaver" "Multi-plataform database tool" "on"
         "vscode" "Visual Studio Code editor" "on"
+        "flatseal" "Flatpak permissions manager" "on"
+        "hidamari" "Live wallpaper app" "on"
+        "dbeaver" "Multi-plataform database tool" "on"
     )
     
     # First ask if the user wants to select all applications
@@ -78,6 +79,7 @@ install_apps() {
     # Install RPM repositories
     whiptail --title "Instalando Repositórios" --msgbox "Configurando repositórios necessários..." 8 45
     sudo dnf install fedora-workstation-repositories -y
+    sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1 -y
     
     # Process selected applications
     for app in $selected_apps; do
@@ -87,25 +89,8 @@ install_apps() {
         case "$app" in
             "google-chrome")
                 whiptail --title "Instalando Google Chrome" --infobox "Instalando Google Chrome..." 8 45
-                sudo dnf config-manager --set-enabled google-chrome
+                sudo dnf config-manager setopt google-chrome.enabled=1 -y
                 sudo dnf install google-chrome-stable -y
-                sudo dnf remove fedora-chromium-config -y
-                ;;
-            "discord")
-                whiptail --title "Instalando Discord" --infobox "Instalando Discord via Flatpak..." 8 45
-                flatpak install flathub com.discordapp.Discord -y
-                ;;
-            "flatseal")
-                whiptail --title "Instalando Flatseal" --infobox "Instalando Flatseal via Flatpak..." 8 45
-                flatpak install flathub com.github.tchx84.Flatseal -y
-                ;;
-            "obs-studio")
-                whiptail --title "Instalando OBS Studio" --infobox "Instalando OBS Studio via Flatpak..." 8 45
-                flatpak install flathub com.obsproject.Studio -y
-                ;;
-            "hidamari")
-                whiptail --title "Instalando Hidamari" --infobox "Instalando Hidamari via Flatpak..." 8 45
-                flatpak install flathub io.github.jeffshee.Hidamari -y
                 ;;
             "brave")
                 whiptail --title "Instalando Brave" --infobox "Instalando Brave..." 8 45
@@ -113,15 +98,23 @@ install_apps() {
                 sudo dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
                 sudo dnf install brave-browser -y
                 ;;
-            "dbeaver")
-                whiptail --title "Instalando Hidamari" --infobox "Instalando DBeaver Community via Flatpak..." 8 45
-                flatpak install flathub io.dbeaver.DBeaverCommunity -y
-                ;;
             "vscode")
                 whiptail --title "Instalando Visual Studio Code" --infobox "Instalando Visual Studio Code..." 8 45
                 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
                 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
                 sudo dnf install code -y
+                ;;
+            "flatseal")
+                whiptail --title "Instalando Flatseal" --infobox "Instalando Flatseal via Flatpak..." 8 45
+                flatpak install flathub com.github.tchx84.Flatseal -y
+                ;;
+            "hidamari")
+                whiptail --title "Instalando Hidamari" --infobox "Instalando Hidamari via Flatpak..." 8 45
+                flatpak install flathub io.github.jeffshee.Hidamari -y
+                ;;
+            "dbeaver")
+                whiptail --title "Instalando Hidamari" --infobox "Instalando DBeaver Community via Flatpak..." 8 45
+                flatpak install flathub io.dbeaver.DBeaverCommunity -y
                 ;;
             *)
                 # Install regular DNF packages
@@ -141,35 +134,30 @@ install_apps_auto() {
     
     # Install RPM repositories
     sudo dnf install fedora-workstation-repositories -y
+    sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1 -y
     
     # Install Google Chrome
     log_info "Instalando Google Chrome..."
-    sudo dnf config-manager --set-enabled google-chrome
-    sudo dnf install google-chrome-stable -y
-    sudo dnf remove fedora-chromium-config -y
-    
-    # Install regular DNF packages
-    log_info "Instalando pacotes DNF padrão..."
-    sudo dnf install flameshot peek gnome-tweaks steam gimp inkscape gnome-extensions-app htop nvim -y
-    
-    # Install Flatpak applications
-    log_info "Instalando aplicativos Flatpak..."
-    flatpak install flathub com.discordapp.Discord -y
-    flatpak install flathub com.github.tchx84.Flatseal -y
-    flatpak install flathub com.obsproject.Studio -y
-    flatpak install flathub io.github.jeffshee.Hidamari -y
-    
+    sudo dnf config-manager setopt google-chrome.enabled=1 -y
+
     # Install Brave browser
     log_info "Instalando Brave browser..."
     sudo dnf install dnf-plugins-core -y
     sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-    sudo dnf install brave-browser -y
     
-    # Install VS Code
+     # Install VS Code
     log_info "Instalando Visual Studio Code..."
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-    sudo dnf install code -y
+
+    # Install regular DNF packages
+    log_info "Instalando pacotes DNF padrão..."
+    sudo dnf install flameshot peek gnome-tweaks steam gimp inkscape gnome-extensions-app htop nvim fastfetch discord obs-studio google-chrome-stable brave-browser code -y
+    
+    # Install Flatpak applications
+    log_info "Instalando aplicativos Flatpak..."
+    flatpak install flathub com.github.tchx84.Flatseal -y
+    flatpak install flathub io.github.jeffshee.Hidamari -y
     
     log_success "Todos os aplicativos instalados com sucesso!"
 }

@@ -11,10 +11,9 @@ show_menu() {
             "6" "Instalar Fonts" \
             "7" "Configurar Git" \
             "8" "Configurar chave SSH" \
-            "9" "Gerenciar Extensões GNOME" \
-            "10" "Instalar Tudo Automaticamente" \
-            "11" "Verificar Atualizações" \
-            "12" "Sair" 2>/tmp/menuitem.txt
+            "9" "Instalar Tudo Automaticamente" \
+            "10" "Verificar Atualizações" \
+            "11" "Sair" 2>/tmp/menuitem.txt
         
         # Check if the user pressed Cancel or Esc
         if [ $? -ne 0 ]; then
@@ -32,10 +31,9 @@ show_menu() {
             6) install_fonts ;;
             7) configure_git ;;
             8) create_ssh_key ;;
-            9) manage_gnome_extensions ;;
-            10) install_all ;;
-            11) check_for_updates ;;
-            12) 
+            9) install_all ;;
+            10) check_for_updates ;;
+            11) 
                 whiptail --title "Saindo" --msgbox "Obrigado por usar o $SCRIPT_NAME!" 8 45
                 exit 0 
                 ;;

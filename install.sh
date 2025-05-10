@@ -13,7 +13,7 @@ source "${PROJECT_DIR}/lib/constants.sh"
 source "${PROJECT_DIR}/lib/common.sh"
 source "${PROJECT_DIR}/lib/utils.sh"
 source "${PROJECT_DIR}/lib/clipboard.sh"
-source "${PROJECT_DIR}/lib/gnome-extensions.sh"
+# source "${PROJECT_DIR}/lib/gnome-extensions.sh"
 
 # Setup function to ensure all required directories exist
 setup_workspace() {
